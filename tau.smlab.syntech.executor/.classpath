@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/cmplib.jar"/>
+	<classpathentry kind="src" path="/tau.smlab.syntech.logs"/>
+	<classpathentry kind="src" path="/tau.smlab.syntech.jtlv"/>
+	<classpathentry kind="src" path="/tau.smlab.syntech.games"/>
+	<classpathentry kind="src" path="/tau.smlab.syntech.games.gr1"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -241,7 +241,7 @@ public class ControllerExecutor {
 	 * 
 	 * @param inputs
 	 */
-	private BDD getInputsBDD(Map<String, String> inputs) throws IllegalArgumentException {
+	protected BDD getInputsBDD(Map<String, String> inputs) throws IllegalArgumentException {
 		
 		BDD inputsBDD = Env.TRUE();
 		for (String varName : inputs.keySet()) {

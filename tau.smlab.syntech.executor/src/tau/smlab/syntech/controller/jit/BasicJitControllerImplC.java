@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.util.List;
 
 import net.sf.javabdd.BDD;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import tau.smlab.syntech.jtlv.Env;
 
 /**
@@ -121,17 +120,17 @@ public class BasicJitControllerImplC implements JitController {
 
 	@Override
 	public List<BDD> getJusticeGar() {
-		throw new NotImplementedException();
+		return null;
 	}
 
 	@Override
 	public List<BDD> getJusticeAsm() {
-		throw new NotImplementedException();
+		return null;
 	}
 
 	@Override
 	public JitContext getJitContext() {
-		throw new NotImplementedException();
+		return null;
 	}
 
 	@Override
@@ -146,7 +145,7 @@ public class BasicJitControllerImplC implements JitController {
 
 	@Override
 	public JitState getJitState() {
-		throw new NotImplementedException();
+		return null;
 	}
 
 	@Override

@@ -76,10 +76,10 @@ public class BasicJitController implements JitController {
 			BDD currAndJustice = justiceGar.get(jitState.getJx()).and(currentState);
 			if (!currAndJustice.isZero()) {
 				
-				//System.out.println("rho1 with jx=" + jitState.getJx());
+				//System.out.println("rho1 with j=" + jitState.getJx());
 				jitState.updateJx();
 				
-				// It is guaranteed to stop on some k because Y[jx][rank] = Z
+				// It is guaranteed to stop on some r because Y[j][r_j] = Z
 				
 				BDD temp;
 				for (int r = 0; r < jitContext.rank(jitState.getJx()); r++) {
@@ -88,7 +88,7 @@ public class BasicJitController implements JitController {
 					if (!temp.isZero()) {
 						nextStates = temp;
 						jitState.setRank(r);
-						//System.out.println("rho1 with new jx=" + jitState.getJx() + " and next kx=" + jitState.getRank());
+						//System.out.println("rho1 with new j=" + jitState.getJx() + " and next r=" + jitState.getRank());
 						break;
 					}
 					
@@ -106,7 +106,7 @@ public class BasicJitController implements JitController {
 					if (!temp.isZero()) {
 						temp.free();
 						nextStates = currAndTrans.and(jitContext.X(jitState.getJx(), i, 0));
-						//System.out.println("rho3 with jx=" + jitState.getJx() + " and kx=0 and ix=" + jitState.getIx());
+						//System.out.println("rho3 with j=" + jitState.getJx() + " and r=0 and i=" + i);
 						break;
 					}
 					
@@ -134,7 +134,7 @@ public class BasicJitController implements JitController {
 					if (!temp.isZero()) {
 						temp.free();
 						nextStates = currAndTrans.and(jitContext.X(jitState.getJx(), i, jitState.getRank()));
-						//System.out.println("rho3 with jx=" + jitState.getJx() + " and kx=" + jitState.getRank() + " and ix=" + jitState.getIx());
+						//System.out.println("rho3 with j=" + jitState.getJx() + " and r=" + jitState.getRank() + " and i=" + i);
 						break;
 					}
 					
@@ -145,13 +145,13 @@ public class BasicJitController implements JitController {
 				
 			} else {
 				
-				// It is guaranteed to stop on some k because Y[jx][rank] = Z
+				// It is guaranteed to stop on some r because Y[j][r_j] = Z
 				BDD temp;
 				for (int r = 0; r < jitContext.rank(jitState.getJx()); r++) {
 					temp = currAndTrans.and(jitContext.Y(jitState.getJx(), r));
 					
 					if (!temp.isZero()) {
-						//System.out.println("rho2 with jx=" + jitState.getJx() + " and kx=" + jitState.getRank() + " and next kx="+ r);
+						//System.out.println("rho2 with j=" + jitState.getJx() + " and r=" + jitState.getRank() + " and next r="+ r);
 						nextStates = temp;
 						jitState.setRank(r);
 						break;
