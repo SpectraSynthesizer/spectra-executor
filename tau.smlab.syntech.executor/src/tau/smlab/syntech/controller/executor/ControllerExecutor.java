@@ -117,8 +117,8 @@ public class ControllerExecutor {
 	 */
 	public ControllerExecutor(Controller controller, String folder, String name, boolean reordering) throws IOException {
 		
-//		BDDPackage.setCurrPackage(BDDPackage.CUDD, BBDPackageVersion.CUDD_3_0);
-		BDDPackage.setCurrPackage(BDDPackage.JTLV, BBDPackageVersion.DEFAULT); 
+		BDDPackage.setCurrPackage(BDDPackage.CUDD, BBDPackageVersion.CUDD_3_0);
+//		BDDPackage.setCurrPackage(BDDPackage.JTLV, BBDPackageVersion.DEFAULT); 
 		sysVars = new HashMap<>();
 		envVars = new HashMap<>();
 		if (name == null) {

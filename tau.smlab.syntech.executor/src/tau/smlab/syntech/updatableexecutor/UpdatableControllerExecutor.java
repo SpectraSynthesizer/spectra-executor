@@ -41,13 +41,12 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import net.sf.javabdd.BDD;
 import net.sf.javabdd.BDDVarSet;
-import tau.smlab.syntech.controller.Controller;
+import tau.smlab.syntech.games.controller.Controller;
 import tau.smlab.syntech.controller.executor.ControllerExecutor;
 import tau.smlab.syntech.games.util.SaveLoadWithDomains;
 import tau.smlab.syntech.jtlv.Env;
 import tau.smlab.syntech.jtlv.ModuleVariableException;
 import tau.smlab.syntech.jtlv.env.module.ModuleBDDField;
-import tau.smlab.syntech.updatableexecutor.DynamicUpdateServer;
 
 public class UpdatableControllerExecutor extends ControllerExecutor {
 
@@ -61,6 +60,7 @@ public class UpdatableControllerExecutor extends ControllerExecutor {
 	protected String outFolder;
 	protected String bridgeFolder;
 	protected boolean reordering;
+	protected String name;
 
 	protected DynamicUpdateServer server;
 
@@ -75,17 +75,18 @@ public class UpdatableControllerExecutor extends ControllerExecutor {
 	protected BDD bridgeTrans;
 	BDDVarSet bridgeVars;
 
-	public UpdatableControllerExecutor(Controller controller, String folder, int port) throws IOException, ModuleVariableException {
-		this(controller, folder, port, false);
+	public UpdatableControllerExecutor(Controller controller, String folder, String name, int port) throws IOException, ModuleVariableException {
+		this(controller, folder, name, port, false);
 	}
 
-	public UpdatableControllerExecutor(Controller controller, String folder, int port, boolean reordering) throws IOException, ModuleVariableException {
-		super(controller, folder, reordering);
+	public UpdatableControllerExecutor(Controller controller, String folder, String name, int port, boolean reordering) throws IOException, ModuleVariableException {
+		super(controller, folder, name, reordering);
 
 		this.curBridge = -1;
 		stepCount = 0;
 
 		this.outFolder = folder + File.separator;
+		this.name = name;
 		this.bridgeFolder = this.outFolder + BRIDGE_DIR + File.separator;
 		this.reordering = reordering;
 		
@@ -200,12 +201,10 @@ public class UpdatableControllerExecutor extends ControllerExecutor {
 	    SaveLoadWithDomains.loadStructureAndDomains(this.outFolder + SaveLoadWithDomains.VARS_FILE, sysVars, envVars);
 
 	    sysVars.entrySet().removeIf(var -> var.getKey().startsWith("util_"));
-	    sysVars.entrySet().removeIf(var -> var.getKey().startsWith("sfa_states"));
 	    envVars.entrySet().removeIf(var -> var.getKey().startsWith("util_"));
-	    sysVars.entrySet().removeIf(var -> var.getKey().startsWith("sfa_states"));
 
 		this.controller = newController;
-		this.controller.load(this.outFolder);
+		this.controller.load(this.outFolder, this.name, sysVars, envVars);
 
 		System.out.println("New controller is loaded.");
 		
