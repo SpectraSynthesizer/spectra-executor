@@ -38,7 +38,7 @@ import java.util.Set;
 
 import net.sf.javabdd.BDD;
 import net.sf.javabdd.BDD.BDDIterator;
-import tau.smlab.syntech.controller.Controller;
+import tau.smlab.syntech.games.controller.Controller;
 import tau.smlab.syntech.jtlv.Env;
 
 public class FlexibleControllerExecutor extends ControllerExecutor {
@@ -46,9 +46,30 @@ public class FlexibleControllerExecutor extends ControllerExecutor {
 	boolean waitingForChoice = false;
 	List<Map<String, String>> choices = new ArrayList<>();
 	int maxStates = 100;
+	
+	BDD savedState = null;
 
-	public FlexibleControllerExecutor(Controller controller, String folder) throws IOException {
-		super(controller, folder);
+	public FlexibleControllerExecutor(Controller controller, String folder, String name) throws IOException {
+		super(controller, folder, name);
+	}
+	
+	public void free() {
+		super.free();
+		this.savedState.free();
+	}
+	
+	public void saveCurrentState() {
+		this.savedState = this.currentState.id();
+		this.controller.saveState();
+	}
+	
+	public void returnToSavedState() throws IllegalStateException {
+		if (this.savedState == null) {
+			throw new IllegalStateException("Cannot return to state if no state was saved beforehand");
+		}
+		this.currentState.free();
+		this.currentState = this.savedState;
+		this.controller.loadState();
 	}
 	
 	public void updateState(Map<String, String> inputs) throws IllegalStateException, IllegalArgumentException {

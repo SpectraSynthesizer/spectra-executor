@@ -42,7 +42,7 @@ import net.sf.javabdd.BDD;
 import net.sf.javabdd.BDD.BDDIterator;
 import net.sf.javabdd.BDDDomain;
 import net.sf.javabdd.BDDVarSet;
-import tau.smlab.syntech.controller.Controller;
+import tau.smlab.syntech.games.controller.Controller;
 import tau.smlab.syntech.games.util.SaveLoadWithDomains;
 import tau.smlab.syntech.jtlv.BDDPackage;
 import tau.smlab.syntech.jtlv.BDDPackage.BBDPackageVersion;
@@ -88,40 +88,49 @@ public class ControllerExecutor {
 
 	}
 	
+	
 	/**
 	 * Instantiates a new symbolic controller executor.
 	 * @param controller instance of the controller interface
 	 * @param folder location of the controller files
+	 * @param name the name of the specification
 	 * 
 	 * @throws IOException if the folder does not contain the controller files
 	 */
+	public ControllerExecutor(Controller controller, String folder, String name) throws IOException {
+		this(controller, folder, name, false);
+	}
+	
 	public ControllerExecutor(Controller controller, String folder) throws IOException {
-		this(controller, folder, false);
+		this(controller, folder, null, false);
 	}
 	
 	/**
 	 * Instantiates a new symbolic controller executor.
 	 * @param controller instance of the controller interface
 	 * @param folder location of the controller files
+	 * @param name the name of the specification
 	 * @param reordering whether to turn on bdd reordering during the execution. Reordering may
 	 * result in better performance generally but causes spikes (a very long single step) once in a while
 	 * 
 	 * @throws IOException if the folder does not contain the controller files
 	 */
-	public ControllerExecutor(Controller controller, String folder, boolean reordering) throws IOException {
+	public ControllerExecutor(Controller controller, String folder, String name, boolean reordering) throws IOException {
 		
 		BDDPackage.setCurrPackage(BDDPackage.CUDD, BBDPackageVersion.CUDD_3_0); 
 		sysVars = new HashMap<>();
 		envVars = new HashMap<>();
-	    SaveLoadWithDomains.loadStructureAndDomains(folder + File.separator + SaveLoadWithDomains.VARS_FILE, sysVars, envVars);
+		if (name == null) {
+			SaveLoadWithDomains.loadStructureAndDomains(folder + File.separator + SaveLoadWithDomains.VARS_FILE, sysVars, envVars);
+		} else {
+			SaveLoadWithDomains.loadStructureAndDomains(folder + File.separator + name + "." + SaveLoadWithDomains.VARS_FILE, sysVars, envVars);
+		}
 	    
 	    sysVars.entrySet().removeIf(var -> var.getKey().startsWith("util_"));
-	    sysVars.entrySet().removeIf(var -> var.getKey().startsWith("sfa_states"));
 	    envVars.entrySet().removeIf(var -> var.getKey().startsWith("util_"));
-	    sysVars.entrySet().removeIf(var -> var.getKey().startsWith("sfa_states"));
 		
 		this.controller = controller;
-		this.controller.load(folder);
+		this.controller.load(folder, name, sysVars, envVars);
 		
 		if (reordering) {
 			Env.enableReorder();
